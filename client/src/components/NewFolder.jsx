@@ -22,8 +22,7 @@ function NewFolder() {
         navigate(-1)
     }
     const handleAddNewFolder = async () => {
-        const {addFolder} = await addNewFolder({name: newFolderName})
-        console.log(addFolder)
+        await addNewFolder({name: newFolderName})
         handleClose()
     }
 
