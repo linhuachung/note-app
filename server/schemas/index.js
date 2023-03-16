@@ -10,7 +10,6 @@ export const typeDefs = `#graphql
   type Note {
     id: String!,
     content: String,
-    index: Number,
     updatedAt: Date
   }
   type Author {
