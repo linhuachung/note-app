@@ -1,22 +1,24 @@
 import React, {useEffect, useState} from 'react'
-import {Box, Card, CardContent, Grid, IconButton, List, Tooltip, Typography} from "@mui/material";
-import {Link, Outlet, useLoaderData, useNavigate, useParams, useSubmit} from "react-router-dom";
+import {Grid} from "@mui/material";
+import {Outlet, useLoaderData, useNavigate, useParams, useSubmit} from "react-router-dom";
 import {NoteAddOutlined} from "@mui/icons-material";
-import moment from 'moment'
+import DroppableComponent from "./DroppableComponent.jsx";
+import DraggableComponent from "./DraggableComponent.jsx";
+import NoteComponent from "./NoteComponent.jsx";
 
 function NoteList() {
     const navigate = useNavigate()
-    const {noteId,folderId} = useParams()
+    const {noteId, folderId} = useParams()
     const [activeNoteId, setActiveNoteId] = useState(noteId)
     const {folder} = useLoaderData()
     const submit = useSubmit()
 
     useEffect(() => {
-        if (noteId){
+        if (noteId) {
             setActiveNoteId(noteId)
             return
         }
-        if (folder?.notes?.[0]){
+        if (folder?.notes?.[0]) {
             navigate(`note/${folder.notes[0].id}`)
         }
     }, [noteId, folder.notes])
@@ -39,42 +41,24 @@ function NoteList() {
                       overflowY: 'auto',
                       padding: '10px',
                       textAlign: 'left'
-                    }}
+                  }}
             >
-                <List
-                    subheader={
-                        <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-                            <Typography sx={{fontWeight: 'bold'}}>
-                                Notes
-                            </Typography>
-                            <Tooltip title={"Add Note"} onClick={handleAddNewNote}>
-                                <IconButton size={"small"}>
-                                    <NoteAddOutlined />
-                                </IconButton>
-                            </Tooltip>
-                        </Box>
-                    }
-                >
-                    {
-                        folder?.notes.map(({id, content, updatedAt}) => {
-                            return (
-                                <Link to={`note/${id}`} key={id} style={{textDecoration: 'none'}} onClick={() => setActiveNoteId(id)}>
-                                    <Card sx={{mb: '5px', backgroundColor: id === activeNoteId ? 'rgb(255 211 140)' : noteId && null}}>
-                                        <CardContent sx={{'&:last-child': {pb: '10px'}, padding: '10px'}}>
-                                            <div style={{fontStyle: '14px', fontWeight: 'bold'}}
-                                                 dangerouslySetInnerHTML={{__html: `${content.substring(0,30) || 'Empty'}`}}
-                                            />
-                                            <Typography sx={{fontSize: '10px'}}>{moment(updatedAt).format('MMMM Do YYYY, h:mm:ss a')}</Typography>
-                                        </CardContent>
-                                    </Card>
-                                </Link>
-                            )
-                        })
-                    }
-                </List>
+                <DroppableComponent droppableId={'note'} handleAddNewItem={handleAddNewNote} title={"Notes"} icon={<NoteAddOutlined/>}>
+                       {
+                           folder?.notes.map(({id, content, updatedAt}, index) => {
+                               return (
+                                   <DraggableComponent draggableId={id} index={index} key={id}>
+                                       <NoteComponent id={id} content={content} updatedAt={updatedAt} setActiveItem={setActiveNoteId} activeItemId={activeNoteId} itemId={noteId} url={'note'}
+                                       />
+                                   </DraggableComponent>
+                               )
+                           })
+                       }
+                </DroppableComponent>
+
             </Grid>
             <Grid item xs={8}>
-                <Outlet />
+                <Outlet/>
             </Grid>
         </Grid>
     )

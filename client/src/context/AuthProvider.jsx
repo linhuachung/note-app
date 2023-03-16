@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useState } from 'react';
 import { getAuth } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
+import {DragDropContext} from "react-beautiful-dnd";
 
 export const AuthContext = createContext();
 
@@ -37,8 +38,10 @@ export default function AuthProvider({ children }) {
     }, [auth]);
 
     return (
-        <AuthContext.Provider value={{ user, setUser }}>
-            {isLoading ? <CircularProgress /> : children}
-        </AuthContext.Provider>
+        <DragDropContext>
+            <AuthContext.Provider value={{ user, setUser }}>
+                {isLoading ? <CircularProgress /> : children}
+            </AuthContext.Provider>
+        </DragDropContext>
     );
 }

@@ -1,0 +1,32 @@
+                    <Droppable droppableId={'note'}>
+                                            {(provided) =>
+                                                <ul {...provided.droppableProps} ref={provided.innerRef}>
+                                                    {
+                                                        folder?.notes.map(({id, content, updatedAt}, index) => {
+                                                            return <Draggable draggableId={id} index={index} key={id}>
+                                                                {(provided) => <li {...provided.draggableProps} {...provided.dragHandleProps}
+                                                                                   ref={provided.innerRef}>
+                                                                    <Link
+                                                                        to={`note/${id}`}  style={{textDecoration: 'none'}}
+                                                                        onClick={() => setActiveNoteId(id)}>
+                                                                        <Card sx={{
+                                                                            mb: '5px',
+                                                                            backgroundColor: id === activeNoteId ? 'rgb(255 211 140)' : noteId && null
+                                                                        }}>
+                                                                            <CardContent sx={{'&:last-child': {pb: '10px'}, padding: '10px'}}>
+                                                                                <div style={{fontStyle: '14px', fontWeight: 'bold'}}
+                                                                                     dangerouslySetInnerHTML={{__html: `${content.substring(0, 30) || 'Empty'}`}}
+                                                                                />
+                                                                                <Typography
+                                                                                    sx={{fontSize: '10px'}}>{moment(updatedAt).format('MMMM Do YYYY, h:mm:ss a')}</Typography>
+                                                                            </CardContent>
+                                                                        </Card>
+                                                                    </Link>
+                                                                </li>}
+                                                            </Draggable>
+                                                        })
+                                                    }
+                                                    {provided.placeholder}
+                                                </ul>
+                                            }
+                                        </Droppable>
