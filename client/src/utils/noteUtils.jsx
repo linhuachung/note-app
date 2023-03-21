@@ -13,13 +13,12 @@ export const notesLoader = async ({ params: { folderId } }) => {
     }
   }`;
 
-    const data = await graphUrlRequest({
+    return await graphUrlRequest({
         query,
         variables: {
             folderId,
         },
     });
-    return data;
 };
 
 export const noteLoader = async ({ params: { noteId } }) => {
@@ -30,13 +29,12 @@ export const noteLoader = async ({ params: { noteId } }) => {
     }
   }`;
 
-    const data = await graphUrlRequest({
+    return await graphUrlRequest({
         query,
         variables: {
             noteId,
         },
     });
-    return data;
 };
 
 export const addNewNote = async ({params, request}) => {

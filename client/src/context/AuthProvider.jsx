@@ -1,17 +1,17 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { getAuth } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
-import {DragDropContext} from "react-beautiful-dnd";
 
 export const AuthContext = createContext();
 
-export default function AuthProvider({ children }) {
+export default  function AuthProvider({ children }) {
     const [user, setUser] = useState({});
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
 
     const auth = getAuth();
+
 
     useEffect(() => {
         const unsubcribed = auth.onIdTokenChanged((user) => {
@@ -37,11 +37,10 @@ export default function AuthProvider({ children }) {
         };
     }, [auth]);
 
+
     return (
-        <DragDropContext>
             <AuthContext.Provider value={{ user, setUser }}>
-                {isLoading ? <CircularProgress /> : children}
+                    {isLoading ? <CircularProgress /> : children}
             </AuthContext.Provider>
-        </DragDropContext>
     );
 }

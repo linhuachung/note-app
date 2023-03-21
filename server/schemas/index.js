@@ -7,9 +7,14 @@ export const typeDefs = `#graphql
     author: Author,
     notes: [Note]
   }
+  input FolderUpdate {
+    id: String,
+    name: String,
+  }
   type Note {
     id: String!,
     content: String,
+    destination: String,
     updatedAt: Date
   }
   type Author {
@@ -23,6 +28,7 @@ export const typeDefs = `#graphql
   }
   type Mutation {
     addFolder(name: String!): Folder,
+    updateFolderList(folderUpdate: [FolderUpdate]): [Folder],
     addNote(content: String!, folderId: ID!): Note,
     updateNote(id: String!,content: String!): Note,
     register(uid: String!, name: String!): Author

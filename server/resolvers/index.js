@@ -43,8 +43,6 @@ export const resolvers = {
         notes: async (parent, args) => {
             return await NoteModel.find({
                 folderId: parent.id
-            }).sort({
-                updatedAt: 'desc'
             })
         }
     },
@@ -72,6 +70,12 @@ export const resolvers = {
             })
             await newFolder.save()
             return newFolder
+        },
+        updateFolderList: async (parent, args, context) => {
+            console.log({parent,args})
+            const newFolderList = new FolderModel({...args, authorId: context.uid})
+            await newFolderList.save()
+            return newFolderList
         },
         register: async (parent, args) => {
             const foundUser = await AuthorModel.findOne({uid: args.uid});

@@ -1,10 +1,12 @@
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import {Grid} from "@mui/material";
 import {Outlet, useLoaderData, useNavigate, useParams, useSubmit} from "react-router-dom";
 import {NoteAddOutlined} from "@mui/icons-material";
 import DroppableComponent from "./DroppableComponent.jsx";
 import DraggableComponent from "./DraggableComponent.jsx";
 import NoteComponent from "./NoteComponent.jsx";
+import {AuthContext} from "../context/AuthProvider.jsx";
+import {notesLoader} from "../utils/noteUtils.jsx";
 
 function NoteList() {
     const navigate = useNavigate()
@@ -12,7 +14,9 @@ function NoteList() {
     const [activeNoteId, setActiveNoteId] = useState(noteId)
     const {folder} = useLoaderData()
     const submit = useSubmit()
+    const [noteSort , setNoteSort] = useState(folder?.notes)
 
+    useEffect(() => {setNoteSort(folder?.notes)},[folder])
     useEffect(() => {
         if (noteId) {
             setActiveNoteId(noteId)
@@ -43,9 +47,9 @@ function NoteList() {
                       textAlign: 'left'
                   }}
             >
-                <DroppableComponent droppableId={'note'} handleAddNewItem={handleAddNewNote} title={"Notes"} icon={<NoteAddOutlined/>}>
+                <DroppableComponent droppableId={'note'} handleAddNewItem={handleAddNewNote} title={"Notes"} icon={<NoteAddOutlined/>} itemSort={noteSort} setItemSort={setNoteSort}>
                        {
-                           folder?.notes.map(({id, content, updatedAt}, index) => {
+                           noteSort.map(({id, content, destination, updatedAt}, index) => {
                                return (
                                    <DraggableComponent draggableId={id} index={index} key={id}>
                                        <NoteComponent id={id} content={content} updatedAt={updatedAt} setActiveItem={setActiveNoteId} activeItemId={activeNoteId} itemId={noteId} url={'note'}

@@ -18,8 +18,23 @@ export const addNewFolder = async (newFolder) => {
                             name
                          }
                    }}`
-    const data = await graphUrlRequest({query, variables: {
+    return await graphUrlRequest({
+        query, variables: {
             name: newFolder.name,
-        },})
-    return data
+        },
+    })
+}
+
+export const updateFolderList = async (FolderList) => {
+    console.log(FolderList)
+    const query = `mutation Mutation( $folderUpdate: [FolderUpdate]) {
+        updateFolderList(folderUpdate: $folderUpdate ) {
+            name
+        }
+    }`
+
+    return await graphUrlRequest({
+            query,
+            variables: {name: FolderList}
+    })
 }
