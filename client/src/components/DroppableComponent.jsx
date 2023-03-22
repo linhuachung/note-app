@@ -5,12 +5,17 @@ import {Box, IconButton, List, Tooltip, Typography} from "@mui/material";
 function DroppableComponent({droppableId, children, ...props}) {
     const onDragEnd = (res) => {
         if (!res.destination) return;
-        // console.log(res)
         const items = Array.from(props.itemSort);
         const [reorderedItem] = items.splice(res.source.index, 1);
         items.splice(res.destination.index, 0, reorderedItem);
-        // console.log(items)
-        props.setItemSort(items);
+        const newList = items.map((item, index) => {
+            return {
+                ...item,
+                order: index
+            }
+        })
+        props.updateList(newList)
+        props.setItemSort(newList);
     }
     return (
         <DragDropContext onDragEnd={onDragEnd}>

@@ -8,6 +8,7 @@ export const notesLoader = async ({ params: { folderId } }) => {
       notes {
         id
         content
+        order
         updatedAt
       }
     }
@@ -26,6 +27,7 @@ export const noteLoader = async ({ params: { noteId } }) => {
     note(noteId: $noteId) {
       content
       id
+      order
     }
   }`;
 
@@ -47,6 +49,7 @@ export const addNewNote = async ({params, request}) => {
         addNote(content: $content, folderId: $folderId) {
             id
             content
+            order
         }
     }`
     const {addNote} = await graphUrlRequest({query,
@@ -71,4 +74,17 @@ export const updateNote = async ({params, request}) => {
         variables: formDataObj
     })
     return updateNote
+}
+
+export const updateNoteList = async (noteUpdate) => {
+    const query = `mutation Mutation($noteUpdate: [NoteUpdate]) {
+              updateNoteList(noteUpdate: $noteUpdate) {
+                id
+                content
+              }
+            }`
+    return await graphUrlRequest({
+        query,
+        variables: {noteUpdate}
+    })
 }

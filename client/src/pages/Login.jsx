@@ -1,8 +1,6 @@
 import React from 'react';
 import {Button, Typography} from '@mui/material';
 import {GoogleAuthProvider, signInWithPopup, getAuth} from 'firebase/auth';
-import {useContext} from 'react';
-import {AuthContext} from '../context/AuthProvider';
 import  {Navigate} from 'react-router-dom';
 import { graphUrlRequest} from '../utils/request';
 

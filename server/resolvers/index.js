@@ -18,11 +18,12 @@ export const resolvers = {
     }),
     Query: {
         folders: async (parent, args, context) => {
-            return await FolderModel.find({
+            const list = await FolderModel.find({
                 authorId: context.uid
             }).sort({
-                updatedAt: 'desc'
+                order: 'asc'
             })
+            return list
         },
         folder: async (parent, args) => {
             const folderId = args.folderId
@@ -43,12 +44,15 @@ export const resolvers = {
         notes: async (parent, args) => {
             return await NoteModel.find({
                 folderId: parent.id
+            }).sort({
+                order: 'asc'
             })
         }
     },
     Mutation: {
         addNote: async (parent, args) => {
-            const newNote = new NoteModel(args)
+            const listNote = await NoteModel.find({folderId: args.folderId})
+            const newNote = new NoteModel({...args, order: listNote.length})
             await pubsub.publish("NOTE_CREATED", {
                 folderCreated: {
                     message: 'A new note created',
@@ -61,21 +65,31 @@ export const resolvers = {
             const noteId = args.id
             return await noteModel.findByIdAndUpdate(noteId, args)
         },
+        updateNoteList: async (parent, args, context) => {
+            const {noteUpdate} = args
+            return await Promise.all(noteUpdate.map(async (item) => {
+                const test =  await NoteModel.findByIdAndUpdate(item.id, item)
+                return test
+            }));
+        },
         addFolder: async (parent, args, context) => {
-            const newFolder = new FolderModel({...args, authorId: context.uid})
+            const listFolder = await FolderModel.find({authorId: context.uid})
+            const newFolder = new FolderModel({...args, authorId: context.uid, order: listFolder.length})
+
             await pubsub.publish("FOLDER_CREATED", {
                 folderCreated: {
                     message: 'A new folder created',
                 },
             })
-            await newFolder.save()
+
+            newFolder.save()
             return newFolder
         },
         updateFolderList: async (parent, args, context) => {
-            console.log({parent,args})
-            const newFolderList = new FolderModel({...args, authorId: context.uid})
-            await newFolderList.save()
-            return newFolderList
+           const {folderUpdate} = args
+            return await Promise.all(folderUpdate.map(async (item) => {
+                return await FolderModel.findByIdAndUpdate(item.id, item)
+            }));
         },
         register: async (parent, args) => {
             const foundUser = await AuthorModel.findOne({uid: args.uid});

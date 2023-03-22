@@ -9,7 +9,7 @@ function NoteComponent({id, content, updatedAt, ...props}) {
             <Card sx={{mb: '5px', backgroundColor: id === props.activeItemId ? 'rgb(255 211 140)' : props.itemId && null}}>
                 <CardContent sx={{'&:last-child': {pb: '10px'}, padding: '10px'}}>
                     <div style={{fontStyle: '14px', fontWeight: 'bold'}}
-                         dangerouslySetInnerHTML={{__html: `${content.substring(0,30) || 'Empty'}`}}
+                         dangerouslySetInnerHTML={{__html: `${content?.substring(0,30) || 'Empty'}`}}
                     />
                     {updatedAt && <Typography sx={{fontSize: '10px'}}>{moment(updatedAt).format('MMMM Do YYYY, h:mm:ss a')}</Typography>}
                 </CardContent>

@@ -12,17 +12,17 @@ function Note() {
     const [editorState, setEditorState] = useState(() => {
         return EditorState.createEmpty()
     })
-    const [rawHTML, setRawHTL] = useState(note.content)
+    const [rawHTML, setRawHTL] = useState(note?.content)
 
     useEffect(() => {
-        setRawHTL(note.content)
-    },[note.content])
+        setRawHTL(note?.content)
+    },[note?.content])
 
     useEffect(() => {
-        const blocksFromHTML = convertFromHTML(note.content)
+        const blocksFromHTML = convertFromHTML(note?.content || "")
         const state = ContentState.createFromBlockArray(blocksFromHTML.contentBlocks,blocksFromHTML.entityMap)
         setEditorState(EditorState.createWithContent(state))
-    },[note.id])
+    },[note?.id])
 
     useEffect(() => {
         debouncedMemorized(rawHTML, note, location.pathname)

@@ -5,6 +5,10 @@ const folderSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    order: {
+        type: Number,
+        required: false
+    },
     authorId: {
         type: String,
         required: true

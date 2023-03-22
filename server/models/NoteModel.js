@@ -4,8 +4,9 @@ const noteSchema = new mongoose.Schema({
     content: {
         type: String,
     },
-    destination: {
-        type: String
+    order: {
+        type: Number,
+        required: false
     },
     folderId: {
         type: String,

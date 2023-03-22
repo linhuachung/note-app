@@ -5,16 +5,24 @@ export const typeDefs = `#graphql
     name: String,
     createdAt: String,
     author: Author,
-    notes: [Note]
+    notes: [Note],
+    order: Int
   }
-  input FolderUpdate {
+  input FolderUpdate{
     id: String,
     name: String,
+    order: Int
   }
   type Note {
     id: String!,
     content: String,
-    destination: String,
+    order: Int
+    updatedAt: Date
+  }
+   input NoteUpdate {
+    id: String!,
+    content: String,
+    order: Int
     updatedAt: Date
   }
   type Author {
@@ -31,6 +39,7 @@ export const typeDefs = `#graphql
     updateFolderList(folderUpdate: [FolderUpdate]): [Folder],
     addNote(content: String!, folderId: ID!): Note,
     updateNote(id: String!,content: String!): Note,
+    updateNoteList(noteUpdate: [NoteUpdate]): [Note],
     register(uid: String!, name: String!): Author
     pushNotification(content: String): Message
   }

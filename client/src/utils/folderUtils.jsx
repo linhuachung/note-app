@@ -5,6 +5,7 @@ export const folderLoader = async () => {
                          folders {
                          id
                          name
+                         order
                    }}`
     const data = await graphUrlRequest({query})
     return data
@@ -14,9 +15,7 @@ export const addNewFolder = async (newFolder) => {
     const query = `mutation Mutation($name: String!) {
                          addFolder(name: $name) {
                          name
-                         author{
-                            name
-                         }
+                    
                    }}`
     return await graphUrlRequest({
         query, variables: {
@@ -25,16 +24,15 @@ export const addNewFolder = async (newFolder) => {
     })
 }
 
-export const updateFolderList = async (FolderList) => {
-    console.log(FolderList)
+export const updateFolderList = async (folderUpdate) => {
     const query = `mutation Mutation( $folderUpdate: [FolderUpdate]) {
         updateFolderList(folderUpdate: $folderUpdate ) {
+            id
             name
         }
     }`
-
     return await graphUrlRequest({
             query,
-            variables: {name: FolderList}
+            variables: {folderUpdate}
     })
 }
