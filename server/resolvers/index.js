@@ -1,6 +1,6 @@
 import {AuthorModel, FolderModel, NoteModel, NotificationModel} from "../models/index.js";
 import {GraphQLScalarType} from 'graphql'
-import { PubSub } from 'graphql-subscriptions';
+import {PubSub} from 'graphql-subscriptions';
 
 import noteModel from "../models/NoteModel.js";
 
@@ -68,8 +68,7 @@ export const resolvers = {
         updateNoteList: async (parent, args, context) => {
             const {noteUpdate} = args
             return await Promise.all(noteUpdate.map(async (item) => {
-                const test =  await NoteModel.findByIdAndUpdate(item.id, item)
-                return test
+                return await NoteModel.findByIdAndUpdate(item.id, item)
             }));
         },
         addFolder: async (parent, args, context) => {
